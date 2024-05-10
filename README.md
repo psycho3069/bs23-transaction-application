@@ -10,5 +10,7 @@
 
 5. php artisan serve
 
+6. php artisan test (for testing test cases using phpunit)
+
 
 # Now you can test the APIs with postman or other third party tools
