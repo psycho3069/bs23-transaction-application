@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransactionRequest;
+use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -60,11 +61,35 @@ class TransactionController extends Controller
 
         $payment_data['transaction_id'] = Str::ulid()->toBase32();
 
-        $transaction = Transaction::query()->create($payment_data);
+        $data['transaction'] = Transaction::query()->create($payment_data);
+        $data['message'] = 'transaction is stored';
 
-        return response()->json($transaction,200,[
+        return response()->json($data,201,[
             'Cache-Control' => 'no-store'
         ]);
+
+    }
+
+    public function update_transaction(UpdateTransactionRequest $request){
+        $transaction_data = $request->validated();
+
+        $transaction = Transaction::query()->where('transaction_id',$transaction_data['transaction_id'])->first();
+
+        if($transaction){
+            $transaction->update([
+                'status' => $transaction_data['status']
+            ]);
+
+            $data['transaction'] = $transaction;
+            $data['message'] = 'transaction is updated';
+
+            return response()->json($data,200);
+        } else {
+            $data['transaction'] = $transaction;
+            $data['message'] = 'transaction not found';
+
+            return response()->json($data,404);
+        }
 
     }
 }

@@ -9,4 +9,4 @@ Route::post('/mock-response', [TransactionController::class,'mock_response']);
 
 Route::post('/store-transaction', [TransactionController::class,'store_transaction']);
 
-Route::post('/transaction-callback', [TransactionController::class,'transaction_callback']);
+Route::post('/update-transaction', [TransactionController::class,'update_transaction']);
